@@ -23,26 +23,28 @@ matches the render buffer.
 Every parameter in this plugin is calibrated against real Redshift renders,
 not derived from documentation or guesswork: Redshift is closed source, so
 the underlying math was reverse-engineered and then measured against
-hundreds of Redshift probe renders until it matched to within float32
+hundreds of Redshift renders until it matched to within float32
 precision. See [Matching Redshift]({{site.baseurl}}/matching-redshift) for
 the verified accuracy numbers.
 
 ## What's included?
 
-* [**Optical** group]({{site.baseurl}}/parameters#optical) — Exposure Type (EV / Filmic), Sensitivity (ISO), Aperture, Shutter Time, Whitepoint, Vignetting
-* [**Tonemapping** group]({{site.baseurl}}/parameters#tone-mapping) — Highlights, Desaturate Highlights, Blacks, Blacks Threshold, Saturation
+* [**Optical**]({{site.baseurl}}/parameters#optical) — Exposure Type (EV / Filmic), Sensitivity (ISO), Aperture, Shutter Time, Whitepoint, Vignetting
+* [**Tone-Mapping**]({{site.baseurl}}/parameters#tone-mapping) — Highlights, Desaturate Highlights, Blacks, Blacks Threshold, Saturation
 * [**Bloom**]({{site.baseurl}}/parameters#bloom) — Intensity, Threshold, Softness, 5-swatch Tint
 * [**Streak**]({{site.baseurl}}/parameters#streak) — Intensity, Threshold, Tail, Softness, Number, Angle
-* [**Houdini and Cinema 4D bridges**]({{site.baseurl}}/houdini) — *Copy Settings* on the Redshift camera, *Paste* in After Effects: every PostFX value travels as one small JSON block, plus shared presets
-* Works entirely on **scene-linear float** data, before any view/OCIO transform — exactly where Redshift applies it (your project needs a linear working space: 32 bpc + OCIO/ACEScg, or *Linearize Working Space* on — see [How to Install]({{site.baseurl}}/install))
-* SmartFX, 32-bit float, Multi-Frame-Rendering safe
+* [**LUT**]({{site.baseurl}}/parameters#lut) — any Redshift `.cube` LUT, with Convert to Log Space and Strength
+* [**Output**]({{site.baseurl}}/parameters#output) — show the composite or the lens effects alone, and mix each lens effect
+* [**Presets**]({{site.baseurl}}/parameters#presets) — save and load the whole look as one portable file, shared with Cinema 4D, Houdini and Resolve
+* [**Houdini and Cinema 4D bridges**]({{site.baseurl}}/houdini) — *Copy Settings* on the Redshift camera, *Paste* in After Effects: every PostFX value travels as one small block of text
+* Works entirely on **scene-linear float** data, before any view/OCIO transform — exactly where Redshift applies it (your project needs a linear working space: 32 bpc + OCIO, or *Linearize Working Space* on — see [How to Install]({{site.baseurl}}/install#colour-pipeline))
+* 32-bit float, multi-frame rendering ready
 
 - - -
 
-**Status: pre-release.** {{ site.title }} is under active development —
-see [How to Install]({{site.baseurl}}/install) for the current dev-build
-workflow, and the [Changelog]({{site.baseurl}}/changelog) for what's
-landed so far.
+**Early access.** {{ site.title }} is under active development. See
+[How to Install]({{site.baseurl}}/install) to get it running and the
+[Changelog]({{site.baseurl}}/changelog) for what's new.
 
 <div class="footer-info">
   <span class="connection-status">Measured, not guessed.</span>
