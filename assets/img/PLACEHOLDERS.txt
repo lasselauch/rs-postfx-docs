@@ -1,0 +1,22 @@
+Expected image assets (none exist yet)
+=======================================
+
+Finished logos exist for the "RS PostFX" wordmark (hexagonal red mark +
+wordmark + "for After Effects" tagline, navy/red/white on a dark
+background) -- see docs/research/product-positioning.md section 3 for the
+naming decision -- but no exported file has been dropped in here yet.
+Pages reference these by their eventual filename, so adding the real file
+is the only step needed once it's available. No markup changes required.
+
+- logo-lockup.svg       full lockup (mark + wordmark + tagline, dark bg)
+- logo-mark.svg         hexagonal mark alone, for favicon/small-space use
+- hero.png              index.md hero/header image
+- panel-optical.png     screenshot of the Optical parameter group
+- panel-tonemapping.png screenshot of the Tonemapping parameter group
+- panel-bloom.png       screenshot of the Bloom parameter group
+- panel-streak.png      screenshot of the Streak parameter group
+- install-dev-folder.png  screenshot of the _dev Plug-ins folder workflow
+- ab-comparison.png     matching-redshift.md's side-by-side A/B render
+
+Do not fabricate placeholder images for these -- leave the file missing
+until a real capture/asset exists.

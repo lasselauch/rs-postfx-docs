@@ -1,0 +1,63 @@
+// RS PostFX look & feel on top of the color scheme. Class names are
+// deliberately GENERIC (.product-logo, .product-tagline, .hl-primary,
+// .hl-accent) rather than baked into this name the way the reference
+// products' are (.aec4d-logo, .hl-c4d) -- naming is research-settled
+// (docs/research/product-positioning.md section 3; see AUTHORING.md) but
+// keeping these generic still means a rename only needs _config.yml's
+// `title`/`tagline`/`subtitle` and the three hex values in
+// _sass/color_schemes/foo.scss, never these class names or the markup
+// that uses them.
+
+@mixin brand-gradient-text {
+  background: linear-gradient(91.85deg, #F0475A 0%, #6B6BC4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #F0475A; // fallback for browsers without background-clip: text
+}
+
+.main-content h1 {
+  @include brand-gradient-text;
+  width: fit-content;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.main-content h2 {
+  color: #C22E3E;
+  font-weight: 700;
+}
+
+// Sidebar site title + tagline ("RS PostFX" / "for After Effects")
+.product-logo {
+  @include brand-gradient-text;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.product-tagline {
+  display: block;
+  color: #6B6BC4;
+  font-size: 0.7em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.site-title:hover,
+.site-title:focus {
+  background-image: none !important;
+}
+
+// Index headline: gray body, coral/indigo highlighted spans
+.main-content .index-headline {
+  color: #7a7a8a;
+  font-weight: 700;
+
+  .hl-primary {
+    color: #F0475A;
+  }
+
+  .hl-accent {
+    color: #6B6BC4;
+  }
+}

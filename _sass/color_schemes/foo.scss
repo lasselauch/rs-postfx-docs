@@ -1,0 +1,85 @@
+// RS PostFX brand colors, from the logo draft (hexagonal red mark +
+// wordmark + "for After Effects" tagline, navy/red/white on dark). Naming
+// is now research-settled (docs/research/product-positioning.md section 3;
+// see docs/product/AUTHORING.md), but the PALETTE may still move on its
+// own -- these three tokens are the only place color needs to change.
+// Coral/red (mark + primary accent):        #F0475A
+// Soft indigo (tagline color, secondary):   #6B6BC4
+// Dark background (behind the logo lockup): #12122A
+
+$rspfx-coral: #F0475A;
+$rspfx-coral-deep: #C22E3E;
+$rspfx-coral-light: #FF7A8A;
+$rspfx-indigo: #6B6BC4;
+$rspfx-indigo-deep: #4F4F99;
+$rspfx-indigo-light: #9B9BE0;
+$rspfx-dark: #12122A;
+
+// Theme palette hooks (just-the-docs variable names -- do not rename these)
+$purple-000: #f5f5fb; // callout "note" background
+$purple-100: $rspfx-indigo-light;
+$purple-200: $rspfx-indigo;
+$purple-300: $rspfx-indigo-deep; // callout "note" accent
+
+$blue-400: $rspfx-indigo;
+$blue-800: $rspfx-coral;
+$blue-900: $rspfx-coral-deep;
+
+$link-color: $rspfx-coral-deep;
+$btn-primary-color: $rspfx-coral;
+$search-result-highlight-color: $rspfx-coral;
+
+$body-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  Roboto, "Helvetica Neue", Arial, sans-serif;
+
+// Coral button (primary)
+.btn-coral {
+  color: $white !important;
+  background-color: $rspfx-coral !important;
+  background-image: none !important;
+
+  &:hover {
+    background-color: darken($rspfx-coral, 5%) !important;
+  }
+
+  &:active {
+    background-color: darken($rspfx-coral, 10%) !important;
+  }
+}
+
+// Outline button (white with a thin coral->indigo gradient border)
+.btn-coral-outline {
+  color: $rspfx-coral-deep !important;
+  border: 1px solid transparent !important;
+  background:
+    linear-gradient($white, $white) padding-box,
+    linear-gradient(91.85deg, $rspfx-coral 0%, $rspfx-indigo 100%) border-box !important;
+  box-shadow: none !important;
+
+  &:hover {
+    background:
+      linear-gradient(#f5f5fb, #f5f5fb) padding-box,
+      linear-gradient(91.85deg, $rspfx-coral 0%, $rspfx-indigo 100%) border-box !important;
+  }
+
+  &:active {
+    background:
+      linear-gradient(#ebebf6, #ebebf6) padding-box,
+      linear-gradient(91.85deg, $rspfx-coral 0%, $rspfx-indigo 100%) border-box !important;
+  }
+}
+
+// Indigo button (secondary)
+.btn-indigo {
+  color: $white !important;
+  background-color: $rspfx-indigo !important;
+  background-image: none !important;
+
+  &:hover {
+    background-color: darken($rspfx-indigo, 5%) !important;
+  }
+
+  &:active {
+    background-color: darken($rspfx-indigo, 10%) !important;
+  }
+}

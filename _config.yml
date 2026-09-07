@@ -1,0 +1,83 @@
+title: RS PostFX
+subtitle: "Redshift-matched PostFX for AE, Premiere & Resolve"
+description: RS PostFX — Redshift-matched PostFX for AE, Premiere & Resolve. Calibrated 1:1 Redshift tonemapping, measured against real renders.
+
+# NAMING, SETTLED (2026-08-30): "RS PostFX" is the researched, decided name
+# -- see docs/research/product-positioning.md section 3. Naming history:
+# "RSPostFX" (earliest working name) -> "Redshift PostFX" (working name
+# during early docs scaffolding) -> "RS PostFX" (current, research-settled:
+# "Redshift PostFX" leads with a registered Maxon trademark AND reproduces
+# Maxon's own "PostFX" feature name verbatim -- the highest-risk option
+# checked; "RS PostFX" has zero full-mark reproduction, direct aescripts
+# catalog precedent for mark-abbreviation-led names, and costs nothing to
+# ship since the logo already exists). `title`/`tagline`/`subtitle` above
+# are the one place to rename/re-tagline/re-position the product for every
+# Liquid-templated mention across this site (sidebar logo, index.md's
+# headline, any page using {{ site.title }} / {{ site.tagline }} /
+# {{ site.subtitle }}). See AUTHORING.md for the full rename-point list,
+# including everything Liquid can't reach.
+#
+# Per the research (section 3.2), never ship the bare "RS PostFX" as the
+# full product identity in a title/listing-name context -- pair it with
+# the `subtitle` above ("RS PostFX -- Redshift-matched PostFX for After
+# Effects"). Descriptive/referential use of "Redshift" in body prose is
+# fine and expected; what the research flags is only the product's own
+# head wordmark.
+
+# Use remote_theme for both local and GitHub Pages
+remote_theme: just-the-docs/just-the-docs@v0.8.2
+
+# Site configuration -- placeholder until the public docs repo (and a
+# custom domain, if any) are decided; update baseurl alongside the
+# repo-root sync-docs.yml's DOCS_REPO secret.
+url: https://lasselauch.github.io
+baseurl: "/rs-postfx-docs"
+
+# Navigation
+aux_links:
+  "aescripts.com": https://aescripts.com/
+  # "Submit Issue": https://github.com/lasselauch/rs-postfx-docs/issues
+
+aux_links_new_tab: true
+
+# Theme settings
+color_scheme: foo
+search_enabled: true
+nav_enabled: true
+
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# Callouts (note/tip/warning/important blocks)
+callouts:
+  note:
+    color: purple
+  tip:
+    color: green
+  warning:
+    color: yellow
+  important:
+    color: red
+
+# Enable plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-remote-theme
+  - jekyll-redirect-from
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - AUTHORING.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .sass-cache
+  - .jekyll-cache
