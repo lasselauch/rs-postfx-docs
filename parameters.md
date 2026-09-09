@@ -217,45 +217,40 @@ changes nothing.
 | Parameter | Type | Range | Default |
 |:----------|:-----|:------|:--------|
 | Enabled | checkbox | — | Off |
-| LUT File | dropdown | *None* + your Redshift LUT folder | None |
-| **Custom File** ▸ | *sub-group* | | |
-| &nbsp;&nbsp;Choose .cube File… | button | — | — |
-| &nbsp;&nbsp;*(status row)* | text | the chosen file's name | *(none)* |
-| &nbsp;&nbsp;Use Built-in List | button | — | — |
+| Custom LUT | menu + spinner | *None*, your Redshift LUT folder (a submenu per subfolder), *Choose File…* | *(none)* |
 | Convert to Log Space | checkbox | — | Off |
 | Strength | slider | 0 .. 1 ¹ | 1.0 |
 
-Convert to Log Space and Strength sit **outside** the Custom File group because they apply to whichever LUT is
-active — the one from the list or the one you chose from disk.
+Convert to Log Space and Strength apply to whichever LUT is active.
 
 ¹ Redshift's own control accepts 0 to 1, so this is the real range.
 
-**How the file list works.** The menu is built **once per After Effects session** from the `.cube` files in your
-Redshift LUT folder (found automatically; the `RS_POSTFX_LUT_DIR` environment variable overrides it). A LUT added
-to that folder later appears only after an After Effects restart. And what a project saves is the **position in
-the list, not the path** — After Effects dropdowns can only store a position — so if the folder's contents change,
-an old project reopens on whatever now occupies that position. *None* is always first, so "no LUT" is stable
-regardless.
+**Custom LUT is the control.** Click its field and a menu opens that is built **right now** from your Redshift LUT
+folder — one submenu per subfolder — plus *None* and *Choose File…*. Click the **⇅** spinner at its right end to step
+to the previous or next LUT, or **click-and-drag it up or down to scrub** through the list with the image updating
+live as you go.
 
-**Any LUT on disk: "Choose .cube File…".** The dropdown can only offer what your Redshift LUT folder held when the
-effect was first applied in this session. The button opens a normal file dialog, and the file you pick is stored
-**by its full path**, which is the important difference:
+**OFX note.** DaVinci Resolve and Natron have no custom rows to draw, so there the plugin keeps a **LUT File**
+dropdown instead — built once per session from what your Redshift LUT folder held at launch — next to a plain
+**file-path field** for any `.cube` on disk, which the host fills with its own file browser. A path in that field
+takes charge and greys the dropdown out; clearing the field hands control back to the dropdown.
 
-- while a custom file is set it **overrides** the dropdown, and the dropdown greys out to say so;
-- a project stores the **path**, not a menu position — so it survives the folder's contents changing and points
-  at the same file when the project is reopened;
-- **Use Built-in List** clears it and hands control back to the dropdown.
+**What a project saves.** The Custom LUT row saves the **file itself**: its full path plus its path relative to your
+Redshift LUT folder — so a project made on a Mac reopens on a Windows machine with the same LUT, as long as that
+LUT exists under its Redshift folder too.
 
-The file is read the moment you choose it: if it isn't a valid `.cube`, the plugin says so straight away and keeps
-whatever was set before. If the file is later moved or deleted, the row shows its name followed by **(MISSING)**
-and the LUT stage is skipped for those frames — it will not fail your render, and it will not pretend to be
-grading either.
+**Choose File…** opens a normal file dialog for any `.cube` on disk. The file is read the moment you choose it: if it
+isn't a valid `.cube`, the plugin refuses it (the reason is in the diagnostic log) and keeps whatever was set
+before. If a chosen file is later moved or deleted, the row shows its name followed by **(MISSING)** and the LUT
+stage is skipped for those frames — it will not fail your render, and it will not pretend to be grading either.
 
-**Sharing projects across machines.** Paths are absolute. A project opened on another computer finds the LUT only
-if the same path exists there — so for a shared project, keep custom LUTs on a path that is the same everywhere
-(a mounted volume with a fixed mount point, for instance), or use the built-in list, which resolves against each
-machine's own Redshift installation. There is no "relative to the project" option: After Effects gives an effect
-no reliable way to resolve one.
+**Sharing projects across machines.** The Custom LUT row tries the stored absolute path first; if that doesn't
+exist on the machine that opens the project, it falls back to the stored path **relative to a Redshift LUT
+folder** — but only for a LUT that came from inside one (the folder it was picked under, or another machine's
+equivalent). A LUT you pick via **Choose File…** from somewhere else on disk carries no such fallback: its absolute
+path has to exist, unchanged, on every machine that opens the project, or the row shows **(MISSING)**. In OFX, the
+**LUT File** dropdown has no fallback of any kind — it stores a position in its list, not a path, and reopens on
+whatever now occupies that position on the machine that opens it.
 
 **Convert to Log Space** applies Redshift's Cineon log encode before the lookup, for LUTs authored against log
 footage.
@@ -308,7 +303,7 @@ A Flare mixer will appear alongside Bloom and Streak when Flare ships — see
 ## Settings
 
 At the very bottom of the effect, because it configures the plugin rather than the image: **where Redshift is
-installed**, which is what the LUT File list is built from, and **where presets are saved and loaded**.
+installed**, which is what the LUT list is built from, and **where presets are saved and loaded**.
 
 | Parameter | Type |
 |:----------|:-----|
@@ -328,8 +323,9 @@ someone else will not carry either path into their setup. Both are kept in one s
 `~/Library/Application Support/RS-PostFX/settings.json` on macOS and `%APPDATA%\RS-PostFX\settings.json` on
 Windows.
 
-**Changing the Redshift folder needs an After Effects restart to take effect** — the LUT menu is built once per
-session and After Effects gives an effect no way to refill a dropdown afterwards. (The `RS_POSTFX_LUT_DIR`
+**Changing the Redshift folder takes effect immediately in the Custom LUT row** (its menu rescans every time it
+opens); in OFX, the **LUT File** dropdown is built once per session and only picks the change up after a
+Resolve/Natron restart. The Settings status row names both folders when they differ. (The `RS_POSTFX_LUT_DIR`
 environment variable still works and still wins over this setting, for anyone who scripts their setup.)
 **Changing the presets folder takes effect immediately** — the very next Save/Load dialog opens there.
 

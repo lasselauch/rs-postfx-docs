@@ -65,32 +65,41 @@ across the frame. All three keep their Redshift defaults internally and are cand
 
 ## Can I use a LUT that isn't in my Redshift folder?
 
-Yes. **Choose .cube File…** in the LUT group opens a file dialog and stores the file's full path with the project,
-which overrides the dropdown (the dropdown greys out while it does). **Use Built-in List** clears it again.
+Yes. Click the **Custom LUT** row and choose **Choose File…** from the menu that opens; pick **None** from the same
+menu to go back to no LUT. The row works the same way in After Effects and in Premiere Pro.
 
 Two things worth knowing:
 
-- the file is validated when you choose it, so a file that isn't a readable `.cube` is refused there and then
-  rather than quietly doing nothing at render time;
+- the file is read the moment you choose it, so a file that isn't a readable `.cube` is refused there and then
+  (the reason is in the diagnostic log) rather than quietly doing nothing at render time;
 - if the file later moves or is deleted, the row shows its name followed by **(MISSING)** and the LUT stage is
-  skipped for those frames. Your render still completes.
+  skipped for those frames — your render still completes. If the file is still there but no longer parses (edited
+  into something invalid), the row shows **(UNREADABLE)** instead.
 
-Paths are absolute, so a project shared with another machine finds the LUT only if the same path exists there.
-For shared projects, keep custom LUTs somewhere with a stable path, or use the built-in list — that one resolves
-against each machine's own Redshift installation.
+**Sharing this across machines** depends on where the file lives. A LUT picked from inside a Redshift LUT folder is
+also saved as a path *relative* to that folder, so if its absolute path doesn't exist on another machine, the
+plugin retries under that machine's own Redshift LUT folder and still finds it there. A LUT picked from somewhere
+else on disk has no such fallback: its absolute path has to exist, unchanged, on every machine that opens the
+project, or the row shows **(MISSING)** there too.
+
+**OFX note.** DaVinci Resolve and Natron have no custom rows to draw, so the LUT group there shows two plain
+controls instead: the **LUT File** dropdown (built once per session from your Redshift LUT folder) and a
+**file-path field** for any `.cube` on disk, which you fill with the host's own file browser. A path in that field
+takes charge and greys the dropdown out; empty the field and the dropdown is back in charge.
 
 ## How does the LUT picker work?
 
-The **LUT File** menu lists the `.cube` files in your Redshift LUT folder, which the plugin finds automatically on
-both platforms. Two things about it are worth knowing before you build a project around it:
+**Custom LUT is the control.** Click its field and a menu opens that's built right now from your Redshift LUT
+folder — one submenu per subfolder — plus **None** and **Choose File…**. Click the **⇅** spinner at its right end
+to step to the previous or next LUT, or drag it up or down to scrub through the list with the image updating live.
 
-- **The menu is built once per After Effects session.** After Effects can't rebuild an effect's dropdown after it
-  is created, so a LUT you drop into the folder appears only after you restart After Effects.
-- **What a project saves is the position in that list, not the file path.** If you add, remove or rename files in
-  the LUT folder and reopen an old project, the effect will load whatever now sits at that position. "None" is
-  always first, so a project with no LUT chosen is safe either way. If you rely on specific LUTs across a team,
-  keep the folder's contents fixed — or copy the LUTs you use into a dedicated folder and point
-  `RS_POSTFX_LUT_DIR` at it.
+**What a project saves.** The Custom LUT row saves the file itself — its full path, plus its path inside your
+Redshift LUT folder — so it survives folder changes and reopens on the right LUT on another machine, as long as
+that LUT lives under a Redshift folder there too.
+
+**OFX note.** DaVinci Resolve and Natron instead show a **LUT File** dropdown, built once per session from what
+your Redshift LUT folder held at launch — a LUT you drop into the folder only appears there after a restart — next
+to a plain file-path field for picking one from anywhere else on disk.
 
 Set the `RS_POSTFX_LUT_DIR` environment variable to use a folder other than Redshift's own, or use
 **Settings ▸ Locate Redshift Installation…** in the effect.
