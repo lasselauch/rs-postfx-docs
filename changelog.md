@@ -28,6 +28,7 @@ Windows on ARM and Houdini 19.5 join the list, and the macOS plug-ins now say wh
 - **Houdini installer**: finds Houdini on Windows even when Documents is localized or redirected, such as `OneDrive\Dokumente`
 - **Houdini installer**: runs on PCs without Python, using Houdini's own hython instead of the Microsoft Store placeholder
 - **Presets**: files saved as "UTF-8 with BOM" load in Cinema 4D and Houdini too; a file that isn't UTF-8 gets a clear message
+- **Cinema 4D**: the four commands use their own registered Maxon plugin IDs, so they can't collide with another plugin's
 
 ## 0.1.1 · September 9, 2026 · First release
 
