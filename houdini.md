@@ -30,7 +30,8 @@ so one install covers every Houdini version on the machine. Restart Houdini. An 
 four tools: **Copy Settings**, **Paste Settings**, **Save Preset**, **Load Preset**. If a shelf set doesn't show
 it, add it with the shelf set's **+** tab.
 
-**Versions.** This release supports Houdini **20.0 through 22.0**. Houdini 19.x is not covered yet. The Windows
+**Versions.** This release supports Houdini **19.5 through 22.0** — for 19.5 its standard Python 3.9 build; the
+optional Python 3.7 build of 19.5, and anything older, is not covered. The Windows
 installer uses a `python` from the PATH if there is one and otherwise Houdini's own, so it runs on a plain
 workstation without any extra install.
 

@@ -3,42 +3,65 @@ title: Changelog
 layout: default
 nav_order: 100
 ---
+<!-- Generated from the repo root's CHANGELOG.md by tools/sync_changelog.py -- edit that file, not this page. -->
 # Changelog
 
-{: .note }
-> This page is meant to be synced from the repo root's `CHANGELOG.md` by a
-> release script (see `docs/product/AUTHORING.md`) — that automation isn't
-> written yet, so this copy is hand-maintained until then. Keep it in sync
-> with `CHANGELOG.md` manually in the meantime.
+## 0.1.2 · September 10, 2026 · Pre-release
 
-### 0.1.1 (Current — pre-release)
-- [ Changed ] The **Custom LUT** row is now the only LUT control in After Effects and Premiere: the old LUT File dropdown and the Choose/Clear buttons are gone from the panel (OFX keeps its dropdown and its file-path field, since OFX cannot draw custom rows). Pasting from Cinema 4D, Houdini or OFX, and loading a preset, now select the LUT in the row — including a built-in Redshift LUT copied from Cinema 4D or Houdini, which the bridge now recognises from every Redshift install location (a standalone Redshift folder, and whatever your Redshift is actually using) when working out its name, on macOS and Windows. Copying from After Effects still carries the LUT's path inside the Redshift folder so the other apps find it
-- [ Note ] After Effects must feed the effect **scene-linear** pixels: OCIO colour management (working space = the render's space, e.g. ACEScg), or Adobe colour management with *Linearize Working Space* **on** (any working space). With Adobe colour management and Linearize off — even at working space "None" — AE hands effects gamma-encoded pixels and converts back afterwards: every gain comes out to a power (EV +1 renders as ×5.28, or ×4.3–5.0 non-uniform with sRGB) and Bloom/Streak thresholds see encoded values, so the halos all but vanish. Measured across nine project configurations; documented in Install (with a 10-second self-test), FAQ and Matching Redshift
-- [ Fixed ] Bloom and Streak bloomed far too little on real footage: the bright-pass knee had been measured on single pixels, which Redshift averages 2×2 before thresholding. The knee is now measured on flat fields and evaluated on the same 2×2 box luminance Redshift uses; a 1080p production frame now matches Redshift's own bake to 0.002 rms in the added bloom (was 0.136). Threshold semantics are unchanged in the UI, only truer: a pixel at or above Threshold blooms in full, the knee below it is what Softness widens. Verified on single pixels, squares from 2×2 to 8×8, coloured fields, impulses on grey and flat fields (the 2×2 is an even-aligned cell grid, and the plugin reproduces its half-pixel placement)
-- [ Added ] Initial release of the effect for After Effects — 32-bit float, multi-frame rendering ready, macOS + Windows
-- [ Added ] Full Photographic Exposure parameter set: Sensitivity (ISO), Aperture (f/#), Shutter Time, Whitepoint, Vignetting, Highlights, Desaturate Highlights, Blacks, Blacks Threshold, Saturation
-- [ Added ] Optical / Tonemapping parameter groups mirror Redshift's RenderView Display panel exactly, including factory defaults and dynamic parameter visibility
-- [ Added ] EV exposure mode (Exposure Type: EV Only / Filmic) — sweep-verified to compose identically with every other parameter
-- [ Added ] Bloom (first Lens Effect): Intensity, Threshold, Softness, 5-swatch Tint
-- [ Added ] Streak (second Lens Effect): Intensity, Threshold, Tail, Softness, Number, Angle
-- [ Added ] LUT: load any Redshift `.cube` LUT (the shipped packs are found automatically), with Convert to Log Space and Strength — matched to Redshift's own sampling, including the half-texel lattice convention most implementations get wrong
-- [ Note ] With the LUT enabled, values are clamped to Redshift's own Color Correction working range (0.18 × 2^±6.5, i.e. black lifts to ~0.002 and highlights stop at ~16.3). That is measured Redshift behaviour, reproduced on purpose so a difference blend against a render matches; the LUT is also the last stage, after tonemapping and the lens effects
-- [ Note ] The LUT menu is built once per After Effects session from the Redshift LUT folder — a LUT added afterwards needs an AE restart, and `RS_POSTFX_LUT_DIR` overrides the folder. A project saves the LUT's **position in that menu, not its file path** (an After Effects dropdown can only store an index), so if the folder's contents change an old project reopens on whatever now sits at that position; "None" is always first, so an unset LUT is stable
-- [ Note ] The LUT is calibrated for neutral and near-neutral images. Redshift applies a colour shift around its LUT that this plugin does not reproduce — a fraction of a percent on grey, but up to 0.318 of red out of a zero channel on strongly saturated colour
-- [ Added ] Native Windows build (.aex), cross-compiled from macOS
-- [ Improvements ] Multithreaded rendering and FFT-accelerated Bloom for large frames
-- [ Improvements ] Collapsed parameter groups by default; inactive parameters grey out automatically
-- [ Note ] Color Controls (Contrast, Curves) is removed from the v1 interface (measured, deferred): Redshift's contrast is fully measured but not yet matched to standard, and Curves' control-point data cannot be read out of a Cinema 4D scene at all
-- [ Added ] Custom LUT file: **Choose .cube File…** loads any `.cube` from disk, stored with the project **by full path** (not by menu position), overriding the built-in list; **Use Built-in List** clears it. The file is validated when you choose it, and a file that later moves is shown as **(MISSING)** rather than silently skipped
-- [ Note ] Custom LUT paths are absolute, so a project shared with another machine finds the file only if the same path exists there — keep shared custom LUTs on a stable path, or use the built-in list, which resolves against each machine's own Redshift install
-- [ Added ] Settings group (at the bottom of the effect): shows which Redshift folder the LUT list came from, with **Locate Redshift Installation…** and **Reset to Default**. A machine-wide setting, stored per user and never carried inside a project; changing it needs an AE restart to refresh the **LUT File** dropdown (the Custom LUT row added later sees it immediately), and the plugin says so
-- [ Improvements ] The custom-LUT buttons now live in their own **Custom File** sub-group with the status row; Convert to Log Space and Strength stay outside it, since they apply to whichever LUT is active
-- [ Fixed ] A custom LUT edited in place while AE is open now re-reads instead of rendering through the copy loaded earlier in the session; a file edited into something unreadable is shown as **(UNREADABLE)** rather than silently skipped
-- [ Fixed ] Windows: a custom LUT whose path contains characters outside the system code page now opens correctly
-- [ Note ] Flare (third Lens Effect) is removed from the v1 interface (measured, deferred). It was measured in full — six ghosts at exact magnifications about the frame centre, the radial falloff, the bright pass, the Size law, the chromatic dispersion and its position in the chain are all pinned to between two and six decimal places — but the outer edge of a ghost's disk and the Halo's brightness falloff did not reach this project's matching standard, so it ships out of the interface with its real Redshift defaults already in place
-- [ Note ] Measured and worth knowing when comparing renders: focal length is **not an input** to Redshift's baked Flare — it is a pure image-space effect. Ten renders spanning f = 17.578–281.250 mm and 7.32–91.36° vertical FOV, each moving the camera without moving a pixel, came back bit-identical. Not a contradiction of Maxon's docs: two of the three behaviours they describe follow from the model without a focal-length term (a shorter lens is a wider FOV, so a highlight subtends fewer pixels and sits nearer the frame centre)
-- [ Note ] Color Controls (Contrast) and Flare, previously visible but disabled, are now **out of the interface entirely, in every host** (After Effects, Premiere, Resolve); Curves (RGB + per-channel R/G/B) cannot be built at all for the reason given above. All three keep their real Redshift defaults internally and are candidates for a future update once they match Redshift 1:1
-- [ Added ] Diagnostic log per host session (About & Support shows the file; Open Log Folder / Get Support make a bug report a paste plus an attachment); the C4D and Houdini bridges write the same log
-- [ Added ] Presets: save and load the whole PostFX look as a portable .json file (Load/Save Preset below Enable PostFX; the folder is configurable in Settings)
-- [ Changed ] Copy/Paste/preset messages now go to the diagnostic log instead of a pop-up dialog (all hosts)
-- [ Added ] Presets in Cinema 4D, Houdini and Resolve/Fusion — the same .json a preset saved in After Effects produces
+Windows on ARM and Houdini 19.5 join the list, and the macOS plug-ins now say who they really are.
+
+### ✨ New
+
+- **Windows on ARM**: an ARM64 build of the After Effects / Premiere plug-in — not yet tested on real hardware
+- **Houdini 19.5**: the bridge now ships for its standard Python 3.9 build, which also covers the Python 3.9 builds of 20.0 and 20.5
+
+### 💎 Improvements
+
+- **Windows installer**: picks the x64 or ARM64 build for the machine by itself; `install.bat -Arch x64` forces x64 for an emulated host
+
+### 🐞 Fixes
+
+- **macOS**: the plug-ins report their real identity, version and build number in Get Info and crash reports
+- **macOS**: saved projects are unaffected — hosts recognise the effect by its internal name, not the bundle identifier
+
+## 0.1.1 · September 9, 2026 · First release
+
+Redshift's Photographic Exposure, Bloom, Streak and LUT for After Effects, Premiere Pro and DaVinci Resolve —
+measured against Redshift's own renders — plus Copy/Paste bridges for Cinema 4D and Houdini.
+
+### ✨ New
+
+- **Photographic Exposure**: ISO, f-stop, shutter, whitepoint, vignetting, highlights, desaturate highlights, blacks, blacks threshold and saturation
+- **Exposure modes**: EV Only and Filmic next to the physical camera controls
+- **Panel**: Optical and Tone-Mapping groups mirror Redshift's RenderView panel, factory defaults included
+- **Bloom**: Intensity, Threshold, Softness and a 5-swatch Tint
+- **Streak**: Intensity, Threshold, Tail, Softness, Number and Angle
+- **LUT**: any Redshift `.cube`, with Convert to Log Space and Strength, sampled exactly the way Redshift samples it
+- **Custom LUT row**: a menu built live from your Redshift LUT folder, *Choose File…* for any `.cube`, and a spinner to scrub through LUTs
+- **Resolve**: a LUT File dropdown plus a file-path field, since OpenFX can't draw the Custom LUT row
+- **Settings**: see which Redshift folder the LUTs come from — *Locate Redshift Installation…* and *Reset to Default*
+- **Presets**: save and load a whole look as a `.json` — the same file in After Effects, Resolve, Cinema 4D and Houdini
+- **Bridges**: copy a Redshift camera's PostFX in Cinema 4D or Houdini and paste it onto the effect — and back
+- **Diagnostic log**: one per host session; *About & Support* opens it, *Get Support* turns it into a bug report
+- **Windows**: native `.aex` build
+
+### 💎 Improvements
+
+- **Performance**: multithreaded rendering and FFT-accelerated Bloom for large frames
+- **Panel**: groups start collapsed, and parameters that don't apply grey out
+- **Bridges**: a built-in Redshift LUT copied from Cinema 4D or Houdini is recognised from any Redshift install location
+- **Messages**: Copy, Paste and preset messages go to the diagnostic log instead of pop-up dialogs
+
+### 🐞 Fixes
+
+- **Bloom & Streak**: bloom as strongly as Redshift on real footage — a 1080p frame now matches Redshift's bake to 0.002 rms (was 0.136)
+- **Custom LUT**: a `.cube` edited while After Effects is open is re-read; one that no longer parses shows **(UNREADABLE)**
+- **Windows**: LUT paths with characters outside the system code page open correctly
+
+### 📌 Good to know
+
+- **Linear input**: the effect needs scene-linear pixels — OCIO, or Adobe colour management with *Linearize Working Space*. *How to Install* has a 10-second self-test
+- **LUT range**: with the LUT on, values clamp to Redshift's own working range (about 0.002 to 16.3), exactly as Redshift does — see *FAQ*
+- **LUT colour**: calibrated for neutral and near-neutral images; strongly saturated colour can differ — see *Matching Redshift*
+- **Shared projects**: a LUT chosen from outside the Redshift folder needs the same path on every machine — see *Parameters → LUT*
+- **Not in this version**: Flare and Color Controls (Contrast, Curves) — measured, but not yet a 1:1 match with Redshift — see *FAQ*

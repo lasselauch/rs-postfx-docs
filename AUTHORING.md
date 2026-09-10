@@ -14,8 +14,10 @@ actually serves.
    repo — see `c4d-aec4dpro/__create_release.py` / `c4d2hou/__create_release.py`
    for the pattern to copy) so it can:
    - sync `VERSION.txt` into the plugin source (`RSPostFXVersion.h`),
-   - sync `CHANGELOG.md` → `docs/product/changelog.md` (wraps it in the
-     Jekyll front matter below, normalizes header levels to `###`),
+   - sync `CHANGELOG.md` → `docs/product/changelog.md` — **done, as its own
+     step:** `python3 tools/sync_changelog.py` writes the front matter plus the
+     changelog's body verbatim, and `tests/test_changelog.py` fails when the two
+     drift,
    - sync `CHANGELOG.md`'s content into `README.md`'s changelog section, if
      that README grows a mirrored one the way AEC4D-PRO's does.
 3. Push to `main`. `.github/workflows/sync-docs.yml` (repo root) notices
@@ -32,8 +34,26 @@ deploy key, the `DOCS_REPO` / `DOCS_DEPLOY_KEY` secrets and GitHub Pages (deploy
 from branch `main`, root — the c4d2hou-docs pattern) all exist; every push of
 `main` that touches `docs/product/**` now publishes. Runbook, verification
 commands and troubleshooting: `docs/reports/docs-site-go-live.md`. Still not
-written: the release script's changelog/README sync steps (both changelogs are
-hand-synced, see below).
+written: the README sync step (the changelog page is generated, see above).
+
+## Changelog style
+
+Modeled on Raycast's (raycast.com/changelog): short, scannable, what changed for the user.
+`tests/test_changelog.py` enforces the mechanical parts.
+
+- One `## X.Y.Z · Month D, YYYY` heading per release, optionally `· Pre-release` or `· First release`.
+  Newest first; the newest is always `VERSION.txt`'s version.
+- One or two plain sentences under it: what this release is about.
+- Then only these sections, in this order, each optional: `### ✨ New`, `### 💎 Improvements`,
+  `### 🐞 Fixes`, `### 📌 Good to know` (caveats a user must know, not trivia).
+- Every bullet is `- **Area**: fragment` — a short lead-in (Bloom, LUT, Houdini, Windows installer…), then
+  what changed for the user, **30 words at most**. No measurement essays, build numbers or internal file
+  names: the evidence lives in `docs/reports/`, the details on a docs page — point to it by page title
+  (*FAQ*, *Matching Redshift*), never by URL, because the URL carries the product name.
+- Describe what a release ships, not how it got there: no task ids, commit hashes or intermediate steps that
+  never reached a user. Credit a bug reporter by name when it helps ("Thanks, …!").
+- Never name the product (see Naming below).
+- After editing, run `python3 tools/sync_changelog.py`.
 
 ## Naming — research-settled, but still rename-friendly
 
@@ -115,31 +135,6 @@ freezing a brand-neutral **match name** (`AE_Effect_Match_Name`, distinct
 from the display name) before any external build ships, so that a future
 display-name change never orphans saved projects. That's a plugin-side
 change, out of scope for this docs pass.
-
-## Changelog convention
-
-Single source of truth: root `CHANGELOG.md`. `docs/product/changelog.md` is
-meant to be a synced copy (front-matter-wrapped, header levels normalized)
-— hand-edit it alongside `CHANGELOG.md` until the sync step above exists.
-
-Format (matches AEC4D-PRO / C4D2HOU):
-
-```markdown
-### 0.2 (Current)
-- [ Added ] User-facing description, no internal task/ticket numbers
-- [ Fixed ] Ditto
-- [ Improvements ] Ditto
-```
-
-- One `###` heading per version, newest first, `MAJOR.MINOR` (parseable by
-  `float()` — matches AEC4D-PRO's convention; adopt `MAJOR.MINOR.PATCH`
-  only if a future release process needs finer granularity, matching
-  C4D2HOU's).
-- Tag the newest entry `(Current)` — drop the tag once superseded.
-- Bracketed category tags, one space inside the brackets: `[ Added ]`,
-  `[ Fixed ]`, `[ Improvements ]`.
-- Condense internal history into user-facing bullets — no task ids, no
-  commit hashes; credit reporters by name if useful ("Thanks, ...!").
 
 ## Page front matter
 

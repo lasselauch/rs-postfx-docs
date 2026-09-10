@@ -38,9 +38,16 @@ own private `Plug-ins` folder would work for After Effects alone; Premiere never
 > **macOS:** if the installer refuses to open because it comes from an unidentified developer, right-click it and
 > choose **Open** once.
 
+{: .note }
+> **Windows on ARM:** on an ARM PC the installer picks the ARM64 build by itself. That build needs the native
+> ARM64 After Effects / Premiere Pro — if yours is the x64 version running under emulation, run
+> `install.bat -Arch x64` from a command prompt in the same folder instead. The ARM64 build has not yet been
+> tested on real hardware.
+
 ### Manual install
 
-Copy `RSPostFX.plugin` (macOS) or `RSPostFX.aex` (Windows) into the MediaCore folder above yourself, then restart
+Copy `RSPostFX.plugin` (macOS) or `RSPostFX.aex` (Windows — on an ARM PC with a native ARM64 host, the one in the
+`Windows ARM64` folder) into the MediaCore folder above yourself, then restart
 the host. On macOS a file downloaded from the web carries a quarantine flag that stops After Effects from
 loading it, which is why the installer is the recommended route.
 
