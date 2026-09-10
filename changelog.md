@@ -23,6 +23,11 @@ Windows on ARM and Houdini 19.5 join the list, and the macOS plug-ins now say wh
 
 - **macOS**: the plug-ins report their real identity, version and build number in Get Info and crash reports
 - **macOS**: saved projects are unaffected — hosts recognise the effect by its internal name, not the bundle identifier
+- **Windows**: user names, presets and LUT folders with non-English characters (Jürgen, 山田, Grün.cube) now work for presets, LUTs, settings and logs
+- **macOS**: a LUT chosen from a folder with accented characters is recognised as part of your Redshift list, so projects stay portable
+- **Houdini installer**: finds Houdini on Windows even when Documents is localized or redirected, such as `OneDrive\Dokumente`
+- **Houdini installer**: runs on PCs without Python, using Houdini's own hython instead of the Microsoft Store placeholder
+- **Presets**: files saved as "UTF-8 with BOM" load in Cinema 4D and Houdini too; a file that isn't UTF-8 gets a clear message
 
 ## 0.1.1 · September 9, 2026 · First release
 

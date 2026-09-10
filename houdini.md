@@ -24,7 +24,8 @@ In the download, open `Houdini/install/` and double-click **`Install RS PostFX f
 - copies the shelf and its Python payload to `%APPDATA%\RS-PostFX\rspostfx-houdini` (Windows) or
   `~/Library/Application Support/RS-PostFX/rspostfx-houdini` (macOS), and
 - writes a `packages/rspostfx.json` into **every** Houdini preferences folder it finds
-  (`Documents\houdini21.0`, `houdini22.0`, … — OneDrive-synced Documents folders included),
+  (`Documents\houdini21.0`, `houdini22.0`, … — OneDrive-synced, redirected and localized Documents folders such as
+  `OneDrive\Dokumente` included),
 
 so one install covers every Houdini version on the machine. Restart Houdini. An **RS PostFX** shelf appears with
 four tools: **Copy Settings**, **Paste Settings**, **Save Preset**, **Load Preset**. If a shelf set doesn't show
