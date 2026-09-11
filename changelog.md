@@ -6,6 +6,30 @@ nav_order: 100
 <!-- Generated from the repo root's CHANGELOG.md by tools/sync_changelog.py -- edit that file, not this page. -->
 # Changelog
 
+## 0.2.0 · September 11, 2026 · Pre-release
+
+Licensing arrives: register with your aescripts license, or try every feature with a watermark first.
+
+### ✨ New
+
+- **Licensing**: register with your aescripts license under About & Support › License...; one license covers After Effects, Premiere Pro and DaVinci Resolve
+- **Trial**: every feature works without a license, and a red X marks the frame until you register
+- **32 bpc warning**: After Effects flags an 8 or 16 bpc project, where the effect passes frames through untouched, with a one-click Use 32 bpc button
+
+### 💎 Improvements
+
+- **Windows**: built with Microsoft's own C++ runtime, the one After Effects, Premiere Pro and Resolve already install
+- **About & Support**: Product Page and the info button in After Effects' Effects & Presets panel open the aescripts product page; Get Support opens aescripts' contact page
+
+### 🐞 Fixes
+
+- **Vignette**: stays centred on layers larger or smaller than their comp instead of drifting off-centre
+
+### 📌 Good to know
+
+- **Windows on ARM**: not in this release — the licensing framework has no ARM64 build yet
+- **After registering**: purge the cache so frames rendered during the trial lose the X
+
 ## 0.1.2 · September 10, 2026 · Pre-release
 
 Windows on ARM and Houdini 19.5 join the list, and the macOS plug-ins now say who they really are.
@@ -18,6 +42,7 @@ Windows on ARM and Houdini 19.5 join the list, and the macOS plug-ins now say wh
 ### 💎 Improvements
 
 - **Windows installer**: picks the x64 or ARM64 build for the machine by itself; `install.bat -Arch x64` forces x64 for an emulated host
+- **Cinema 4D**: the four commands now share one submenu in the Extensions menu, with short names and one-line descriptions
 
 ### 🐞 Fixes
 

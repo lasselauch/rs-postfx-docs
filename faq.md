@@ -10,6 +10,16 @@ nav_order: 101
 No. {{ site.title }} is an independent plugin that replicates Redshift's Photographic Exposure tonemapping by
 measurement — it is not built or endorsed by Maxon.
 
+## Why is there a red X over my image?
+
+That's the trial watermark — every feature works without a license, but a red X marks the frame until you
+register. Open **About & Support** and click **License...** (After Effects also has a **Register** link at the
+top of the effect), paste your aescripts license code and click **Activate**. Frames rendered during the trial
+keep their X in the cache, so purge it afterwards (After Effects: *Edit › Purge › All Memory & Disk Cache*;
+Premiere Pro: delete render files; Resolve: the frame refreshes on the next change). See
+[Licensing and trial]({{site.baseurl}}/install#licensing-and-trial) for the full picture, including floating and
+render-only licenses.
+
 ## The lens effects pump or flicker on my animation — why?
 
 Check the footage's alpha interpretation (Interpret Footage → Alpha). When an EXR sequence is interpreted as
@@ -39,8 +49,9 @@ embedded Redshift metadata is planned.
 
 ## Which hosts and platforms are supported?
 
-After Effects and Premiere Pro on macOS and Windows, and DaVinci Resolve (plus other OpenFX hosts) through the
-OpenFX version. The Houdini and Cinema 4D bridges run on both platforms as well. See
+After Effects and Premiere Pro on macOS and Windows (x64), and DaVinci Resolve (plus other OpenFX hosts) through
+the OpenFX version. The Houdini and Cinema 4D bridges run on both platforms as well. Windows on ARM isn't
+supported yet — the aescripts licensing framework this plugin now links against has no ARM64 build. See
 [How to Install]({{site.baseurl}}/install).
 
 ## How accurate is it, really?

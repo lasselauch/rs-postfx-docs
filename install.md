@@ -38,16 +38,9 @@ own private `Plug-ins` folder would work for After Effects alone; Premiere never
 > **macOS:** if the installer refuses to open because it comes from an unidentified developer, right-click it and
 > choose **Open** once.
 
-{: .note }
-> **Windows on ARM:** on an ARM PC the installer picks the ARM64 build by itself. That build needs the native
-> ARM64 After Effects / Premiere Pro — if yours is the x64 version running under emulation, run
-> `install.bat -Arch x64` from a command prompt in the same folder instead. The ARM64 build has not yet been
-> tested on real hardware.
-
 ### Manual install
 
-Copy `RSPostFX.plugin` (macOS) or `RSPostFX.aex` (Windows — on an ARM PC with a native ARM64 host, the one in the
-`Windows ARM64` folder) into the MediaCore folder above yourself, then restart
+Copy `RSPostFX.plugin` (macOS) or `RSPostFX.aex` (Windows) into the MediaCore folder above yourself, then restart
 the host. On macOS a file downloaded from the web carries a quarantine flag that stops After Effects from
 loading it, which is why the installer is the recommended route.
 
@@ -84,7 +77,7 @@ paste them, and that save and load the same presets.
   [Houdini to After Effects]({{site.baseurl}}/houdini).
 - **Cinema 4D:** copy the whole `rspostfx-c4d` folder into a `plugins` folder Cinema 4D scans
   (for example `~/Library/Preferences/Maxon/<your Cinema 4D version>/plugins/` on macOS) and restart Cinema 4D.
-  **RS PostFX: Copy** and **RS PostFX: Paste** appear in the Extensions menu.
+  **Copy**, **Paste**, **Load Preset** and **Save Preset** appear under **Extensions › RS PostFX**.
 
 ## Colour pipeline
 
@@ -111,10 +104,20 @@ Info panel). If it is around 5×, or varies across the frame, the project is fee
 
 Premiere Pro's colour management is a separate system and has not been verified for this yet.
 
+## Licensing and trial
+
+- **Trial:** without a license every feature works, and a red X marks the frame. There is no time limit.
+- **Register:** open **About & Support** and click **License...** (After Effects also has a **Register** link at the top of the effect). Paste your aescripts license code and click **Activate**. The aescripts + aeplugins manager app will be able to install a trial or your license for you too, once the product is available in it.
+- **One license, every host:** the same license unlocks After Effects, Premiere Pro and DaVinci Resolve on that machine.
+- **After registering:** frames rendered during the trial keep their X in the cache — purge it (After Effects: *Edit › Purge › All Memory & Disk Cache*; Premiere Pro: delete render files; Resolve: the frame refreshes on the next change).
+- **Moving to another machine:** click **License...** → **Deactivate** first, so the activation is freed.
+- **Floating licenses:** with the aescripts Floating License Server configured, enter `@REMOTE` as the license code.
+- **Render-only licenses** work in the command-line renderer (`aerender`) only; in the interface they show the trial X.
+- **Windows on ARM** is not available yet: the licensing framework has no ARM64 build.
+
 ## Coming later
 
 - Installing through the [aescripts + aeplugins manager app](https://aescripts.com/learn/aescripts-aeplugins-manager-app/)
-- Licensing
 
 [Back to top](#top){: .btn .float-right}
 

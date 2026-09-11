@@ -8,7 +8,8 @@ nav_order: 2
 Every control in {{ site.title }}, with its range and default. The panel follows the layout of the Redshift
 camera's own PostFX tabs: **Optical**, then **Color Correction** (Tone-Mapping and LUT), then **Lens Effects**
 (Bloom and Streak), then **Output**, then **Settings**, with **Copy for C4D** / **Paste from C4D** at the very
-bottom. Above the panel proper sit **About & Support**, the **Enable PostFX** switch and **Presets**.
+bottom. Above the panel proper sit **About & Support**, the **Enable PostFX** switch and **Presets** — and,
+in an 8 or 16 bpc After Effects project, the **32 bpc warning**.
 {: .fs-5 .fw-300 }
 
 Defaults marked **RS factory** are the values a freshly created Redshift camera has, measured directly —
@@ -19,17 +20,31 @@ applying {{ site.title }} untouched changes nothing at all. See
 
 ## About & Support
 
-A collapsed group at the top of the effect. Its four rows show the plugin version, the host version, your
-operating system and this session's log file, with a button beside each:
+A collapsed group at the top of the effect. Its five rows show the plugin version, your license state, the host
+version, your operating system and this session's log file, with a button beside each:
 
 | Button | What it does |
 |:-------|:-------------|
 | Product Page | opens the product page |
+| License... | opens the aescripts registration dialog — register, deactivate, or manage the license |
 | Documentation | opens this documentation |
 | Get Support | copies a support block — version, host, OS, CPU, plugin location, log file, LUT folder — to the clipboard, then opens the support page. A bug report is that paste plus the attached log |
 | Open Log Folder | opens the folder that holds the diagnostic logs |
 
+The License row's name shows the current state — **Trial**, **Licensed to *name***, **Licensed until *date***,
+**Beta license: *name***, **In use on another machine**, and similar — and updates after you register or
+deactivate. See [Licensing and trial]({{site.baseurl}}/install#licensing-and-trial).
+
 These rows always stay active, even with Enable PostFX off.
+
+## 32 bpc warning
+
+{{ site.title }} works on 32-bit float only. In an 8 or 16 bpc After Effects project it passes frames through
+untouched — no grading, and no trial X either — so a **⚠ Needs a 32 bpc project** row appears below About &
+Support. **Use 32 bpc** switches the project to 32 bits per channel in one undoable step, and the row disappears
+once the project is 32 bpc. The row can take a moment to update after you change the bit depth yourself; it
+refreshes the next time After Effects redraws the Effect Controls. Premiere Pro and DaVinci Resolve always
+hand the effect 32-bit float, so they never show it.
 
 ## Enable PostFX
 
@@ -86,8 +101,8 @@ is recorded in the diagnostic log. **Open Log Folder** in About & Support takes 
 and writes the same files — a preset saved in After Effects loads unchanged in Resolve, and back. The one visible
 difference: Resolve's status row shows the preset's name in a read-only field.
 
-**Cinema 4D and Houdini.** Both have their own **Save Preset** / **Load Preset** commands — Cinema 4D in the
-Extensions menu next to **RS PostFX: Copy** / **Paste**, Houdini on the **RS PostFX** shelf next to
+**Cinema 4D and Houdini.** Both have their own **Save Preset** / **Load Preset** commands — Cinema 4D under
+**Extensions › RS PostFX** next to **Copy** / **Paste**, Houdini on the **RS PostFX** shelf next to
 **Copy Settings** / **Paste Settings** — reading and writing the same files in the same shared presets folder. A
 preset saved from a Cinema 4D or Houdini camera loads straight into this effect, and vice versa. Those hosts have
 no Output settings to save, so a preset from there leaves this effect's Output group untouched.

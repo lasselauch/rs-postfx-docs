@@ -7,8 +7,8 @@ nav_order: 4
 
 The complete loop for a Redshift-for-Houdini shot: render a **clean** beauty EXR, copy the camera's PostFX
 settings with one shelf click, paste them into {{ site.title }} in After Effects, and check that the composite
-matches what Redshift shows. Cinema 4D users: the same steps apply, with the **RS PostFX: Copy** command in the
-Extensions menu in place of the shelf tool.
+matches what Redshift shows. Cinema 4D users: the same steps apply, with **Extensions › RS PostFX › Copy** in
+place of the shelf tool.
 {: .fs-5 .fw-300 }
 
 {: .important }
