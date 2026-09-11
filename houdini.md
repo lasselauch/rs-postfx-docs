@@ -141,6 +141,9 @@ curve or bloom shows up in the difference, the HDR boxes were still ticked when 
 
 - **Curves** (Color Controls) never travel, on any host: their data cannot be read from a scene.
 - **Bloom tint on/off** has no Houdini equivalent — Houdini tints are always live; a white tint is a no-op.
+- **Apply color management before LUT** is not in the plugin: a ticked box on a Houdini or Cinema 4D camera is not
+  applied on Paste in After Effects, and a Paste from After Effects turns it off on the camera. Between Houdini and
+  Cinema 4D it carries over normally. Why: [FAQ]({{site.baseurl}}/faq#apply-color-management-before-lut).
 - The plugin's **Output** group (*Show* Composite / Lens Effects only, the Multi-Pass Mixer) is a compositing
   control with no Redshift parameter behind it; it is never written on Copy and never applied on Paste.
 - **Camera H-FOV** and the **frame rate** are copy-only in every direction: a paste onto a Houdini camera never

@@ -142,6 +142,32 @@ scene-linear terms (13 stops centred on middle grey) — and everything that pas
 The plugin reproduces that on purpose: the whole point is that a difference blend against a Redshift render comes
 out black. If you want the LUT's look without the clamp, apply it after this effect with something else.
 
+## Why is there no "Apply color management before LUT" checkbox?
+{: #apply-color-management-before-lut }
+
+Redshift's LUT settings have this checkbox; {{ site.title }} leaves it out on purpose.
+
+**What it does in Redshift.** Normally the LUT is applied to the linear render, before anything converts it for
+your screen. With the box ticked, Redshift first converts the image to what your display shows (using the display
+and view from Redshift's colour management), applies the LUT to that, then converts the result back. It exists for
+LUTs that were made for display images rather than raw renders.
+
+**Why the plugin doesn't have it.** Copying it would mean the effect doing your project's display conversion
+itself. In After Effects, Premiere Pro and Resolve that conversion belongs to the project's colour management, which
+runs after the effect — the plugin works on the linear image, the same place Redshift applies its PostFX. A second
+copy inside the effect would only be right if it matched your project exactly, and this step is unforgiving: in our
+tests, even a LUT that changes nothing came back almost twice as bright in the highlights with the box ticked. So
+instead of guessing, the option is left out.
+
+**What this means for you.**
+
+- **Box off in Redshift** (the default): nothing to do. The LUT matches.
+- **Box on:** once a LUT is active, a Difference blend against the Redshift render won't be black. That is
+  expected, not a setup problem. For an exact match, untick the box in Redshift and render the reference again.
+- **Copy/Paste and presets:** a ticked box in Cinema 4D or Houdini is not applied when you paste into After
+  Effects, and a paste or preset from After Effects turns the box off on the Cinema 4D or Houdini camera. Between
+  Cinema 4D and Houdini the setting carries over normally.
+
 ## I see bloom/streak from the plugin but my Redshift reference at 4K/UHD has none — is that a bug?
 
 No — see [Matching Redshift's known gaps]({{site.baseurl}}/matching-redshift#known-gaps): from 1200 px on the

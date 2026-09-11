@@ -285,6 +285,12 @@ footage.
 The LUT is the **last** stage in the chain — after tonemapping and after Bloom and Streak — which is where Redshift
 applies it.
 
+**Not in the plugin: Apply color management before LUT.** Redshift's LUT settings have one more checkbox, which
+applies the LUT to the image as converted for your display instead of to the linear image. {{ site.title }} leaves
+it out on purpose: that display conversion belongs to your project's colour management, not to the effect. With the
+box off in Redshift (its default) the plugin matches; the
+[FAQ]({{site.baseurl}}/faq#apply-color-management-before-lut) explains what to expect when it is on.
+
 ## Output
 
 Unlike every other group on this page, **Output is not a Redshift parameter** — it is a pair of compositing

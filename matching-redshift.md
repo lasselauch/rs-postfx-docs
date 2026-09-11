@@ -69,6 +69,10 @@ not as a certification.
   shift is about 0.26 % on red and under 0.05 % on green and blue, inside the LUT stage's overall accuracy. So a
   difference blend on a normal, mostly neutral render will be black; on a heavily saturated one it will not, and
   that is a known gap rather than a problem with your setup.
+- **Redshift's "Apply color management before LUT" is not reproduced.** With that checkbox ticked, Redshift applies
+  the LUT to the image as converted for your display, then converts it back — a step that belongs to your project's
+  colour management, not to this effect. Leave it off in Redshift for a clean comparison; the
+  [FAQ]({{site.baseurl}}/faq#apply-color-management-before-lut) explains why.
 - **At large or square frames, Redshift's own file output can silently drop Bloom, Streak and Flare.** In our
   measurements, Redshift's offline render path stops producing all three lens effects once a frame's shorter
   side reaches **1200 px**, and behaves unpredictably right at that boundary — a 1600×1600 render came back with
