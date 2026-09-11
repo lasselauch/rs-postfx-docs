@@ -20,14 +20,18 @@ Licensing arrives: register with your aescripts license, or try every feature wi
 
 - **Windows**: built with Microsoft's own C++ runtime, the one After Effects, Premiere Pro and Resolve already install
 - **About & Support**: Product Page and the info button in After Effects' Effects & Presets panel open the aescripts product page; Get Support opens aescripts' contact page
+- **Streak**: renders up to 1.6× faster on the same CPU, with pixel-for-pixel identical results
+- **Bloom and Streak**: use up to 64 CPU threads instead of 8, so workstations with many cores can put all of them to work
 
 ### 🐞 Fixes
 
 - **Vignette**: stays centred on layers larger or smaller than their comp instead of drifting off-centre
+- **Lens Effects only**: adding the pass over your plate in Add or Screen now brings back the full glow instead of a darker, fainter one
 
 ### 📌 Good to know
 
 - **Windows on ARM**: not in this release — the licensing framework has no ARM64 build yet
+- **Lens Effects only**: the pass is opaque now, so composite it in Add or Screen; in Normal it shows only the glow on black
 - **After registering**: purge the cache so frames rendered during the trial lose the X
 
 ## 0.1.2 · September 10, 2026 · Pre-release

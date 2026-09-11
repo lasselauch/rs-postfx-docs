@@ -314,9 +314,10 @@ effect beyond what Redshift renders is the point of a mixer, not just attenuatin
 its own effect's checkbox.
 
 **Show = Lens Effects only** renders the **glow alone, on black**: the combined contribution of every active lens
-effect, graded once through the same vignette, tone curve and LUT pipeline the composite uses. Alpha is the glow's
-own coverage (premultiplied), not the source alpha, so the pass drops straight onto your own footage in **Add**,
-**Screen** or even **Normal**. On a frame where no lens effect is active, the pass is fully transparent black.
+effect, graded once through the same vignette, tone curve and LUT pipeline the composite uses. The pass is opaque
+(alpha 1), so every host reads it the same way: lay it over your own footage in **Add** or **Screen**. With
+Tone-Mapping and LUT off, the plate plus this pass in Add is exactly the Composite; with either on, the two are
+graded separately and only come close. On a frame where no lens effect is active, the pass is solid black.
 
 A Flare mixer will appear alongside Bloom and Streak when Flare ships — see
 [Not available yet](#not-available-yet).
