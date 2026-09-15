@@ -102,7 +102,73 @@ effect receives linear pixels (Project Settings › Color):
 **+1** and everything else off. The result must be exactly **twice** the plate everywhere (read a pixel in the
 Info panel). If it is around 5×, or varies across the frame, the project is feeding the effect encoded pixels.
 
-Premiere Pro's colour management is a separate system and has not been verified for this yet.
+**Premiere Pro** is different: in its default Rec. 709 working space it hands effects the scene-linear render raised
+to the power 1/2.4, and none of its working spaces is linear. Until the plugin handles that itself, results in
+Premiere Pro do not match Redshift — see [Matching Redshift's known gaps]({{site.baseurl}}/matching-redshift#known-gaps).
+
+## GPU acceleration
+
+{{ site.title }} renders on the graphics card by default in After Effects (both platforms) and in DaVinci Resolve
+on Windows with NVIDIA graphics. There is nothing to switch on:
+
+| Host | macOS | Windows |
+|:-----|:------|:--------|
+| After Effects | Metal | NVIDIA (CUDA) |
+| DaVinci Resolve | CPU in this beta | NVIDIA (CUDA) |
+| Premiere Pro | CPU in this beta | CPU in this beta |
+
+- **Same pixels.** A frame rendered on the graphics card matches the CPU render to within about 5×10⁻⁶ of its peak
+  value — float precision, black in a Difference blend. A difference you can see is a bug: please report it.
+- **Whichever is faster, in After Effects.** On every Mac — Apple silicon and Intel with AMD graphics alike — After
+  Effects renders Bloom and Bloom+Streak frames on the CPU, and Streak frames below about 5.5 megapixels on the CPU,
+  because the CPU is faster for them there; everything else renders on the GPU. On an NVIDIA card, After Effects
+  renders everything on the GPU. Resolve renders every frame on the GPU — it does not route individual frames yet.
+- **Premiere Pro and Resolve on macOS render on the CPU in this beta.** Premiere Pro's GPU path has not yet been
+  checked pixel-for-pixel in a running Premiere Pro, and on Apple silicon Resolve's GPU renders Bloom and
+  Bloom+Streak frames up to 2.8× slower than the CPU.
+- **A failed GPU frame still renders.** If the graphics card cannot finish a frame, for example because it ran out
+  of memory, After Effects renders that frame on the CPU itself, and Resolve re-renders it on its own CPU path. If
+  the card fails for good, After Effects renders the rest of that session on the CPU.
+- **AMD and Intel graphics on Windows** render on the CPU, with the same results.
+- **The host has to offer the GPU.** After Effects does so only with *File › Project Settings › Video Rendering and
+  Effects* set to *Mercury GPU Acceleration*. With *Mercury Software Only* the plugin renders on the CPU.
+- **The first GPU frame after launching a host** can take about a second longer, while its GPU kernels compile
+  once; every frame after that runs at full speed.
+- **After Effects' disk cache** can hand back a frame rendered before a change: purge it (*Edit › Purge › All
+  Memory & Disk Cache*) after installing a new build and after switching between GPU and software rendering.
+- **Windows: a keyframed Sensitivity (ISO)** makes After Effects stop offering the GPU to the effect, so those
+  frames render on the CPU instead — the pixels are unaffected, only the speed. The cause isn't known yet.
+
+### Turning it off
+
+Use the host's own renderer setting. Rendering the same frame both ways is the quickest way to tell whether a
+problem comes from the GPU path.
+
+- **After Effects:** *File › Project Settings › Video Rendering and Effects › Use:* **Mercury Software Only**. The
+  effect then renders on the CPU. It is a project setting, so it also moves every other GPU effect in that project
+  to the CPU, and `aerender` follows it, so it covers render farms too. Choose *Mercury GPU Acceleration* again to
+  turn the GPU back on.
+- **Premiere Pro:** *File › Project Settings › General › Renderer:* **Mercury Playback Engine Software Only**. In
+  this beta the effect renders on the CPU in Premiere Pro either way.
+- **DaVinci Resolve** has no such switch.
+
+**Purge After Effects' disk cache before you compare** (*Edit › Purge › All Memory & Disk Cache*), then render the
+same frame with each setting. A Difference blend between the two should be black.
+
+### Which path rendered a frame
+
+The [diagnostic log]({{site.baseurl}}/faq#where-are-the-log-files-and-what-should-i-attach-to-a-bug-report) —
+`~/Library/Application Support/RS-PostFX/logs/` on macOS, `%APPDATA%\RS-PostFX\logs\` on Windows — records the
+graphics card as soon as the plugin sets it up, for example:
+
+```
+GPU device: metal 'Apple M2' 16384 MB unified, kernels ready in 1.3 ms
+```
+
+A card the plugin does not use gets a `GPU not used: … -- rendering on the CPU` line with the reason instead. A GPU
+frame that fails and is rendered on the CPU is logged right away, and so is a card that fails for the rest of the
+session. A summary counts the frames rendered on the GPU and on the CPU, with a `routed to cpu` line giving the
+reasons; it is written every few minutes and when the host quits, so quit the host before you send the log.
 
 ## Licensing and trial
 

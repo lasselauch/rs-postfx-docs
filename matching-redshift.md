@@ -47,6 +47,7 @@ fresh renders it had never seen:
 | Bloom | Matches on every single-pixel, patch and coloured-field configuration tested, and on real content: a 1080p production frame (eleven area lights, a mirror ball, a colour checker) matches Redshift's own bake to 0.002 rms in the added bloom, with the halo peak within 0.1 % and the far field within 1 % |
 | Streak | Matches on horizontal and vertical arms (angles that are multiples of 90°); at other angles, including the 20° default, a fine texture near each arm's core differs while arm directions, profile and total energy match — see the note on the [Parameters]({{site.baseurl}}/parameters#streak) page |
 | LUT | Matches Redshift's own sampling, including the half-texel lattice convention most implementations get wrong, on neutral and near-neutral content |
+| GPU rendering | A frame rendered on the graphics card matches the same frame rendered on the CPU to within about 5×10⁻⁶ of its peak value, checked in After Effects on both platforms and in DaVinci Resolve; Premiere Pro's GPU path is opt-in in 0.3.0 and not yet checked at this build — see [GPU acceleration]({{site.baseurl}}/install#gpu-acceleration) |
 
 These are our own verification results, not an independent audit — read them as "this is how it was tested",
 not as a certification.
@@ -80,8 +81,16 @@ not as a certification.
   at every resolution. So an A/B against a Redshift reference exported at 1200 px or larger on its shorter side
   can show the plugin adding lens effects over an empty-looking reference; that is Redshift's own behaviour, not
   the plugin inventing anything. Export the reference below 1200 px on its shorter side for a clean comparison.
-- **GPU acceleration** is not implemented yet — rendering is CPU-only, multithreaded, with FFT-accelerated bloom
-  on large frames.
+- **A Resolve/Windows/NVIDIA thumbnail rendered Streak dimmer in red on the GPU than on the CPU** in testing, in
+  one small "Lens Effects only" frame with Bloom and Streak on. 0.3.0 fixes the likely cause -- the order in which
+  lookup data reached the graphics card -- but the frame never reproduced outside Resolve, so the fix is not proven
+  there. If a GPU frame looks different from its CPU render, please send us the frame — see
+  [Where do I report a bug?]({{site.baseurl}}/faq#where-do-i-report-a-bug).
+- **Premiere Pro does not hand effects linear pixels.** In its default Rec. 709 working space, Premiere Pro passes
+  every effect the scene-linear render raised to the power 1/2.4, and none of its working spaces is linear, so no
+  project setting fixes it. Exposure and tone mapping therefore do not see the values Redshift saw, and a Difference
+  blend against a Redshift reference will not be black there. Handling this inside the plugin is planned; for exact
+  matching, use After Effects or Resolve (see [Colour pipeline]({{site.baseurl}}/install#colour-pipeline)).
 - **Reading camera metadata from the EXR** (to fill Camera H-FOV automatically) is planned but not built. Until
   then, type it in or paste it from the [bridge]({{site.baseurl}}/houdini).
 

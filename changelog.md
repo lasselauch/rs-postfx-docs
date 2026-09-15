@@ -6,6 +6,29 @@ nav_order: 100
 <!-- Generated from the repo root's CHANGELOG.md by tools/sync_changelog.py -- edit that file, not this page. -->
 # Changelog
 
+## 0.3.0 · September 15, 2026 · Beta
+
+GPU acceleration arrives: After Effects renders on the graphics card by default on macOS and Windows, and so does DaVinci Resolve with NVIDIA graphics.
+
+### ✨ New
+
+- **GPU acceleration**: After Effects renders on the graphics card by default, Metal on macOS and NVIDIA CUDA on Windows; DaVinci Resolve does too with NVIDIA graphics
+- **GPU acceleration**: GPU frames match the CPU render to float precision in our tests, so a Difference blend between the two stays black
+- **Routing**: After Effects renders each frame where it is faster, keeping Bloom and smaller Streak frames on the CPU of Macs
+
+### 💎 Improvements
+
+- **Bloom**: renders up to 1.2× faster on the CPU, with pixel-for-pixel identical results
+- **Premiere Pro and Resolve**: CPU renders without Bloom or Streak now use every core
+- **After Effects**: a frame the graphics card can't finish renders on the CPU instead of going missing
+- **After Effects**: a graphics card that fails mid-session hands every later frame to the CPU
+- **Log**: a graphics card that is declined, fails a frame or fails for the session is written to the log right away
+
+### 📌 Good to know
+
+- **Premiere Pro and Resolve on macOS**: render on the CPU in this beta, as in 0.2.0
+- **Turning the GPU off**: in After Effects, set the project's renderer to Mercury Software Only, then purge the disk cache — see *How to Install*
+
 ## 0.2.0 · September 11, 2026 · Pre-release
 
 Licensing arrives: register with your aescripts license, or try every feature with a watermark first.

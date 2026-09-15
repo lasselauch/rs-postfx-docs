@@ -54,14 +54,25 @@ the OpenFX version. The Houdini and Cinema 4D bridges run on both platforms as w
 supported yet — the aescripts licensing framework this plugin now links against has no ARM64 build. See
 [How to Install]({{site.baseurl}}/install).
 
+## Does it use my graphics card?
+
+Yes, by default in After Effects (Metal on macOS, NVIDIA CUDA on Windows) and DaVinci Resolve on Windows (NVIDIA
+CUDA) — there is nothing to switch on. Premiere Pro on both platforms and DaVinci Resolve on macOS render on the CPU
+in this beta. AMD and Intel graphics on Windows always render on the CPU. The GPU and the CPU give the same pixels
+to within float precision, so a difference you can see is a bug. If a frame looks wrong in After Effects, purge the
+disk cache, render it again with *File › Project Settings › Video Rendering and Effects* set to *Mercury Software
+Only*, and compare: [GPU acceleration]({{site.baseurl}}/install#gpu-acceleration) has the steps and what the log
+tells you.
+
 ## How accurate is it, really?
 
 See [Matching Redshift]({{site.baseurl}}/matching-redshift) for the verification numbers per parameter group.
 
 ## What's not supported yet?
 
-Contrast, Curves and Flare (not in the interface — see the next question), GPU acceleration, and reading camera
-metadata from the EXR automatically. See [Matching Redshift's known gaps]({{site.baseurl}}/matching-redshift#known-gaps).
+Contrast, Curves and Flare (not in the interface — see the next question), matching Redshift inside Premiere Pro's
+colour pipeline, and reading camera metadata from the EXR automatically. See
+[Matching Redshift's known gaps]({{site.baseurl}}/matching-redshift#known-gaps).
 
 ## Why aren't Contrast, Curves and Flare in the plugin?
 
@@ -112,8 +123,7 @@ that LUT lives under a Redshift folder there too.
 your Redshift LUT folder held at launch — a LUT you drop into the folder only appears there after a restart — next
 to a plain file-path field for picking one from anywhere else on disk.
 
-Set the `RS_POSTFX_LUT_DIR` environment variable to use a folder other than Redshift's own, or use
-**Settings ▸ Locate Redshift Installation…** in the effect.
+To use a folder other than Redshift's own, use **Settings ▸ Locate Redshift Installation…** in the effect.
 
 ## My composite comes out far too bright (or far too dark), and the bloom halos are missing — what's wrong?
 
@@ -184,7 +194,58 @@ are pruned after 14 days. The About & Support group shows the current file's nam
 folder, and **Get Support** copies the same facts to your clipboard.
 
 For a bug report: click **Get Support**, paste the block it copied, and attach the `rs_postfx.*.log` files. If
-support asks for more detail, set the `RSPE_LOG_LEVEL` environment variable to `debug` before launching the host.
+support asks for more detail, they will point you to the [settings file](#settings-file).
+
+## Advanced: the settings file (not recommended)
+{: #settings-file }
+
+{: .warning }
+> **Only change this file when support asks you to.** You don't need it for normal work: the GPU is on where it
+> helps, and After Effects' own renderer setting turns it off (see
+> [GPU acceleration]({{site.baseurl}}/install#gpu-acceleration)).
+
+{{ site.title }} reads one settings file per machine. It is the same file the effect's **Settings** group writes when
+you locate the Redshift installation or a presets folder:
+
+```
+macOS:   ~/Library/Application Support/RS-PostFX/settings.json
+Windows: %APPDATA%\RS-PostFX\settings.json
+```
+
+It takes two advanced keys, both with text values:
+
+- **`"gpu"`** — `"auto"` is the default, and is also used when the key is missing or its value is unknown. `"off"`
+  renders every host on the CPU; it is the only way to turn the GPU off in DaVinci Resolve on NVIDIA graphics.
+  `"on"` also turns on the GPU paths this beta keeps off — Premiere Pro, and Resolve on macOS — which are
+  experimental and not verified.
+- **`"log_level"`** — `"error"`, `"warn"`, `"info"` (the default), `"debug"` or `"trace"`: how much detail goes
+  into the log files.
+
+For example:
+
+```json
+{
+  "gpu": "off",
+  "log_level": "debug"
+}
+```
+
+The file is JSON. If it already exists, keep the lines it has (such as `"redshift_root"`) and add the new keys,
+with a comma between entries.
+
+- **One setting for the whole machine:** it applies to every host and every project.
+- **Restart the host after editing.** The file is read once when a host starts, not while it runs. For Resolve, a
+  `"gpu"` change also needs Resolve's plug-in cache file deleted before you restart it:
+
+  ```
+  macOS:   ~/Library/Application Support/Blackmagic Design/DaVinci Resolve/OFXPluginCacheV2.xml
+  Windows: %APPDATA%\Blackmagic Design\DaVinci Resolve\Support\OFXPluginCacheV2.xml
+  ```
+- **Check the log.** Its `GPU setting:` line shows the value in effect, for example `GPU setting: auto (default)`.
+  A value the plugin does not recognise is ignored, and the log says so.
+- **Purge After Effects' disk cache** (*Edit › Purge › All Memory & Disk Cache*) after a `"gpu"` change, before you
+  compare frames.
+- **To go back to the defaults,** remove the two keys again and restart the host.
 
 ## Where do my presets live, and how do I share them with the team?
 

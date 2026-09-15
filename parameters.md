@@ -347,8 +347,7 @@ Windows.
 
 **Changing the Redshift folder takes effect immediately in the Custom LUT row** (its menu rescans every time it
 opens); in OFX, the **LUT File** dropdown is built once per session and only picks the change up after a
-Resolve/Natron restart. The Settings status row names both folders when they differ. (The `RS_POSTFX_LUT_DIR`
-environment variable still works and still wins over this setting, for anyone who scripts their setup.)
+Resolve/Natron restart.
 **Changing the presets folder takes effect immediately** — the very next Save/Load dialog opens there.
 
 **No dialogs, log only.** None of these buttons pop up a confirmation or error message — the outcome (the new
