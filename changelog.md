@@ -6,6 +6,28 @@ nav_order: 100
 <!-- Generated from the repo root's CHANGELOG.md by tools/sync_changelog.py -- edit that file, not this page. -->
 # Changelog
 
+## 0.3.1 · September 17, 2026 · Beta
+
+Premiere Pro catches up: Rec. 709 sequences now match Redshift, and the effect renders on the graphics card there too.
+
+### ✨ New
+
+- **Premiere Pro**: Rec. 709 sequences now match Redshift, with no setting to change
+- **Premiere Pro**: renders on the graphics card by default, like After Effects, with Bloom and smaller Streak frames on the CPU of Macs
+
+### 💎 Improvements
+
+- **Premiere Pro**: a frame the graphics card can't finish renders on the CPU instead of showing black
+- **Premiere Pro**: the effect's top row names the sequence's working space
+
+### 🐞 Fixes
+
+- **Premiere Pro**: with the graphics card on, HLG, PQ and ACEScct sequences no longer render with crushed highlights
+
+### 📌 Good to know
+
+- **Premiere Pro**: HLG, PQ and ACEScct sequences don't match Redshift yet
+
 ## 0.3.0 · September 15, 2026 · Beta
 
 GPU acceleration arrives: After Effects renders on the graphics card by default on macOS and Windows, and so does DaVinci Resolve with NVIDIA graphics.

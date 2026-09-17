@@ -46,6 +46,16 @@ once the project is 32 bpc. The row can take a moment to update after you change
 refreshes the next time After Effects redraws the Effect Controls. Premiere Pro and DaVinci Resolve always
 hand the effect 32-bit float, so they never show it.
 
+## Working space (Premiere Pro)
+
+In Premiere Pro only, the same top area also carries a row that names your sequence's working space, with a
+**Details...** button that opens [Known gaps]({{site.baseurl}}/matching-redshift#known-gaps): **Working space:
+not checked** before the first render, **Linear input: Rec. 709** once a Rec. 709 sequence is confirmed matched
+(Premiere may hide the row at that point), **HLG: not matched yet**, **PQ: not matched yet** or
+**ACEScct: not matched yet** for those three sequence types, **Working space not matched** for any other
+working space, and **Working space unknown** if Premiere never answers the query. Widen the Effect Controls
+panel if the name is cut off. After Effects and Resolve never show this row.
+
 ## Enable PostFX
 
 | Parameter | Type | Default |

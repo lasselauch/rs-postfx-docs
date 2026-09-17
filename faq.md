@@ -56,10 +56,10 @@ supported yet — the aescripts licensing framework this plugin now links agains
 
 ## Does it use my graphics card?
 
-Yes, by default in After Effects (Metal on macOS, NVIDIA CUDA on Windows) and DaVinci Resolve on Windows (NVIDIA
-CUDA) — there is nothing to switch on. Premiere Pro on both platforms and DaVinci Resolve on macOS render on the CPU
-in this beta. AMD and Intel graphics on Windows always render on the CPU. The GPU and the CPU give the same pixels
-to within float precision, so a difference you can see is a bug. If a frame looks wrong in After Effects, purge the
+Yes, by default in After Effects and Premiere Pro (Metal on macOS, NVIDIA CUDA on Windows) and DaVinci Resolve on
+Windows (NVIDIA CUDA) — there is nothing to switch on. DaVinci Resolve on macOS renders on the CPU in this beta. AMD
+and Intel graphics on Windows always render on the CPU. The GPU and the CPU give the same pixels to within float
+precision, so a difference you can see is a bug. If a frame looks wrong in After Effects, purge the
 disk cache, render it again with *File › Project Settings › Video Rendering and Effects* set to *Mercury Software
 Only*, and compare: [GPU acceleration]({{site.baseurl}}/install#gpu-acceleration) has the steps and what the log
 tells you.
@@ -70,8 +70,8 @@ See [Matching Redshift]({{site.baseurl}}/matching-redshift) for the verification
 
 ## What's not supported yet?
 
-Contrast, Curves and Flare (not in the interface — see the next question), matching Redshift inside Premiere Pro's
-colour pipeline, and reading camera metadata from the EXR automatically. See
+Contrast, Curves and Flare (not in the interface — see the next question), matching Redshift in Premiere Pro's HLG,
+PQ and ACEScct sequences, and reading camera metadata from the EXR automatically. See
 [Matching Redshift's known gaps]({{site.baseurl}}/matching-redshift#known-gaps).
 
 ## Why aren't Contrast, Curves and Flare in the plugin?
@@ -216,8 +216,8 @@ It takes two advanced keys, both with text values:
 
 - **`"gpu"`** — `"auto"` is the default, and is also used when the key is missing or its value is unknown. `"off"`
   renders every host on the CPU; it is the only way to turn the GPU off in DaVinci Resolve on NVIDIA graphics.
-  `"on"` also turns on the GPU paths this beta keeps off — Premiere Pro, and Resolve on macOS — which are
-  experimental and not verified.
+  `"on"` also turns on the one GPU path this beta still keeps off by default — Resolve on macOS — which is
+  experimental and not verified. Premiere Pro renders on the graphics card by default already.
 - **`"log_level"`** — `"error"`, `"warn"`, `"info"` (the default), `"debug"` or `"trace"`: how much detail goes
   into the log files.
 

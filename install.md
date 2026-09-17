@@ -102,33 +102,37 @@ effect receives linear pixels (Project Settings › Color):
 **+1** and everything else off. The result must be exactly **twice** the plate everywhere (read a pixel in the
 Info panel). If it is around 5×, or varies across the frame, the project is feeding the effect encoded pixels.
 
-**Premiere Pro** is different: in its default Rec. 709 working space it hands effects the scene-linear render raised
-to the power 1/2.4, and none of its working spaces is linear. Until the plugin handles that itself, results in
-Premiere Pro do not match Redshift — see [Matching Redshift's known gaps]({{site.baseurl}}/matching-redshift#known-gaps).
+**Premiere Pro** works with no setting in Rec. 709 sequences (the default): {{ site.title }} receives the render in
+linear light and hands its result back. Put {{ site.title }} at the top of Effect Controls: some of Premiere Pro's
+own effects clip values above 1.0 when they render on the CPU, and highlights they clip are gone before
+{{ site.title }} sees them. Sequences in
+Rec. 2100 HLG, Rec. 2100 PQ or ACEScct are not matched yet; the effect's top row says so — see
+[Matching Redshift's known gaps]({{site.baseurl}}/matching-redshift#known-gaps).
 
 ## GPU acceleration
 
-{{ site.title }} renders on the graphics card by default in After Effects (both platforms) and in DaVinci Resolve
-on Windows with NVIDIA graphics. There is nothing to switch on:
+{{ site.title }} renders on the graphics card by default in After Effects and Premiere Pro (both platforms) and in
+DaVinci Resolve on Windows with NVIDIA graphics. There is nothing to switch on:
 
 | Host | macOS | Windows |
 |:-----|:------|:--------|
 | After Effects | Metal | NVIDIA (CUDA) |
 | DaVinci Resolve | CPU in this beta | NVIDIA (CUDA) |
-| Premiere Pro | CPU in this beta | CPU in this beta |
+| Premiere Pro | Metal | NVIDIA (CUDA) |
 
 - **Same pixels.** A frame rendered on the graphics card matches the CPU render to within about 5×10⁻⁶ of its peak
   value — float precision, black in a Difference blend. A difference you can see is a bug: please report it.
-- **Whichever is faster, in After Effects.** On every Mac — Apple silicon and Intel with AMD graphics alike — After
-  Effects renders Bloom and Bloom+Streak frames on the CPU, and Streak frames below about 5.5 megapixels on the CPU,
-  because the CPU is faster for them there; everything else renders on the GPU. On an NVIDIA card, After Effects
-  renders everything on the GPU. Resolve renders every frame on the GPU — it does not route individual frames yet.
-- **Premiere Pro and Resolve on macOS render on the CPU in this beta.** Premiere Pro's GPU path has not yet been
-  checked pixel-for-pixel in a running Premiere Pro, and on Apple silicon Resolve's GPU renders Bloom and
-  Bloom+Streak frames up to 2.8× slower than the CPU.
+- **Whichever is faster, in After Effects and Premiere Pro.** On every Mac — Apple silicon and Intel with AMD
+  graphics alike — both render Bloom and Bloom+Streak frames on the CPU, and Streak frames below about 5.5
+  megapixels on the CPU, because the CPU is faster for them there; everything else renders on the GPU. On an NVIDIA
+  card, both render everything on the GPU. On Windows with an NVIDIA card, Resolve renders every frame on the GPU
+  — it does not route individual frames yet.
+- **Resolve on macOS renders on the CPU in this beta.** On Apple silicon its GPU renders Bloom and Bloom+Streak
+  frames up to 2.8× slower than the CPU.
 - **A failed GPU frame still renders.** If the graphics card cannot finish a frame, for example because it ran out
-  of memory, After Effects renders that frame on the CPU itself, and Resolve re-renders it on its own CPU path. If
-  the card fails for good, After Effects renders the rest of that session on the CPU.
+  of memory, After Effects and Premiere Pro render that frame on the CPU themselves, and Resolve re-renders it on
+  its own CPU path. If the card fails for good, After Effects and Premiere Pro render the rest of that session on
+  the CPU.
 - **AMD and Intel graphics on Windows** render on the CPU, with the same results.
 - **The host has to offer the GPU.** After Effects does so only with *File › Project Settings › Video Rendering and
   Effects* set to *Mercury GPU Acceleration*. With *Mercury Software Only* the plugin renders on the CPU.
@@ -148,8 +152,8 @@ problem comes from the GPU path.
   effect then renders on the CPU. It is a project setting, so it also moves every other GPU effect in that project
   to the CPU, and `aerender` follows it, so it covers render farms too. Choose *Mercury GPU Acceleration* again to
   turn the GPU back on.
-- **Premiere Pro:** *File › Project Settings › General › Renderer:* **Mercury Playback Engine Software Only**. In
-  this beta the effect renders on the CPU in Premiere Pro either way.
+- **Premiere Pro:** *File › Project Settings › General › Renderer:* **Mercury Playback Engine Software Only**. The
+  effect then renders on the CPU, the same way as in After Effects above.
 - **DaVinci Resolve** has no such switch.
 
 **Purge After Effects' disk cache before you compare** (*Edit › Purge › All Memory & Disk Cache*), then render the
